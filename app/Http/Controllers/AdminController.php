@@ -2,28 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
     public function AdminDashboard()
     {
+
         return view('admin.index');
-    } // End Method 
+    } // End Method  
+
     public function AdminLogout(Request $request)
     {
         Auth::guard('web')->logout();
+
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
         $notification = array(
-            'message' => 'successfully logged out',
+            'message' => 'Admin Logout Successfully',
             'alert-type' => 'success'
         );
-
 
         return redirect('/admin/login')->with($notification);
     } // End Method 
@@ -31,19 +34,20 @@ class AdminController extends Controller
 
     public function AdminLogin()
     {
-        $notification = array(
-            'message' => 'successfully logged out',
-            'alert-type' => 'success'
-        );
 
-        return view('admin.admin_login')->with($notification);
+        return view('admin.admin_login');
     } // End Method 
+
+
     public function AdminProfile()
     {
+
         $id = Auth::user()->id;
         $profileData = User::find($id);
         return view('admin.admin_profile_view', compact('profileData'));
-    }
+    } // End Method 
+
+
     public function AdminProfileStore(Request $request)
     {
 
@@ -64,41 +68,102 @@ class AdminController extends Controller
         }
 
         $data->save();
+
         $notification = array(
-            'message' => 'Admin Profile Updated successfully!',
-            'alert-type ' => 'success'
+            'message' => 'Admin Profile Updated Successfully',
+            'alert-type' => 'success'
         );
+
         return redirect()->back()->with($notification);
     } // End Method 
+
+
+
     public function AdminChangePassword()
     {
+
         $id = Auth::user()->id;
         $profileData = User::find($id);
         return view('admin.admin_change_password', compact('profileData'));
-    }
+    } // End Method 
+
+
     public function AdminUpdatePassword(Request $request)
     {
-        //validate
+
+        // Validation 
         $request->validate([
             'old_password' => 'required',
             'new_password' => 'required|confirmed'
+
         ]);
-        ///match passwords
+
+        /// Match The Old Password
+
         if (!Hash::check($request->old_password, auth::user()->password)) {
+
             $notification = array(
-                'message' => 'old pass does not match!',
-                'alert-type ' => 'error'
+                'message' => 'Old Password Does not Match!',
+                'alert-type' => 'error'
             );
+
             return back()->with($notification);
         }
-        //update the new pass
+
+        /// Update The New Password 
+
         User::whereId(auth()->user()->id)->update([
             'password' => Hash::make($request->new_password)
+
         ]);
+
         $notification = array(
-            'message' => 'password change!',
-            'alert-type ' => 'success'
+            'message' => 'Password Change Successfully',
+            'alert-type' => 'success'
         );
+
         return back()->with($notification);
-    }
+    } // End Method 
+
+
+    /////////// Agent User All Method ////////////
+
+    public function AllAgent()
+    {
+
+        $allagent = User::where('role', 'agent')->get();
+        return view('backend.agentuser.all_agent', compact('allagent'));
+    } // End Method 
+
+    public function AddAgent()
+    {
+
+        return view('backend.agentuser.add_agent');
+    } // End Method 
+
+
+    public function StoreAgent(Request $request)
+    {
+
+        User::insert([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'password' => Hash::make($request->password),
+            'role' => 'agent',
+            'status' => 'active',
+        ]);
+
+
+        $notification = array(
+            'message' => 'Agent Created Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('all.agent')->with($notification);
+    } // End Method 
+
+
+
 }

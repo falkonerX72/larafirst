@@ -19,8 +19,16 @@
                 </ul>
                 @auth
                     <div class="sign-box">
-                        <span>{{ $userData->name }}</span>
-                        <a href="{{ route('dashboard') }}"><i class="fa fa-user-circle"></i>Dashboard</a>
+                        <span>{{ Auth::user()->name }}</span>
+                        @if (Auth::user()->role == 'user')
+                            <a href="{{ route('dashboard') }}"><i class="fa fa-user-circle"></i>Dashboard</a>
+                        @elseif (Auth::user()->role == 'admin')
+                            <a href="{{ route('admin.dashboard') }}"><i class="fa fa-superpowers" aria-hidden="true">
+                                </i>Dashboard</a>
+                        @elseif (Auth::user()->role == 'admin')
+                            <a href="{{ route('admin.dashboard') }}"><i class="fa fa-superpowers"></i>Dashboard</a>
+                        @endif
+
                         <a href="{{ route('user.logout') }}"><i class="fa fa-sign-out"></i>logout</a>
                     </div>
                 @else

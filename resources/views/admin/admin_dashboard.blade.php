@@ -11,59 +11,49 @@
     <meta name="keywords"
         content="nobleui, bootstrap, bootstrap 5, bootstrap5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
 
-    <title>Admin panel | realstate </title>
-    
+    <title>Admin Panel - Real Estate </title>
+    {{-- bootstrapCssLightBox --}}
+
+    <link rel="stylesheet" href="{{ asset('backend/assets/css/lightbox.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/css/bootstrap.css') }}">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <!-- End fonts -->
 
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="{{ asset('backend/assets/vendors/datatables.net-bs5/dataTables.bootstrap5.css') }}">
+    <!-- End plugin css for this page -->
+
     <!-- core:css -->
-    <link rel="stylesheet" href="{{ asset('backend/backend/assets/vendors/core/core.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/vendors/core/core.css') }}">
     <!-- endinject -->
-    backend
+
     <!-- Plugin css for this page -->
     <link rel="stylesheet" href="{{ asset('backend/assets/vendors/flatpickr/flatpickr.min.css') }}">
     <!-- End plugin css for this page -->
 
+    <link rel="stylesheet" href="{{ asset('backend/assets/vendors/select2/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/vendors/jquery-tags-input/jquery.tagsinput.min.css') }}">
     <!-- inject:css -->
     <link rel="stylesheet" href="{{ asset('backend/assets/fonts/feather-font/css/iconfont.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/vendors/flag-icon-css/css/flag-icon.min.css') }}">
     <!-- endinject -->
-
     <!-- Layout styles -->
     <link rel="stylesheet" href="{{ asset('backend/assets/css/demo2/style.css') }}">
     <!-- End layout styles -->
-
     <link rel="shortcut icon" href="{{ asset('backend/assets/images/favicon.png') }}" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+    <link rel="stylesheet" type="text/css"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 </head>
 
 <body>
     <div class="main-wrapper">
-
         <!-- partial:partials/_sidebar.html -->
         @include('admin.body.sidebar')
-        <nav class="settings-sidebar">
-            <div class="sidebar-body">
-                <a href="#" class="settings-sidebar-toggler">
-                    <i data-feather="settings"></i>
-                </a>
-                <div class="theme-wrapper">
-                    <h6 class="text-muted mb-2">Light Theme:</h6>
-                    <a class="theme-item" href="../demo1/dashboard.html">
-                        <img src="../assets/images/screenshots/light.jpg" alt="light theme">
-                    </a>
-                    <h6 class="text-muted mb-2">Dark Theme:</h6>
-                    <a class="theme-item active" href="../demo2/dashboard.html">
-                        <img src="../assets/images/screenshots/dark.jpg" alt="light theme">
-                    </a>
-                </div>
-            </div>
-        </nav>
         <!-- partial -->
-
         <div class="page-wrapper">
 
             <!-- partial:partials/_navbar.html -->
@@ -75,17 +65,16 @@
             <!-- partial:partials/_footer.html -->
             @include('admin.body.footer')
             <!-- partial -->
-
         </div>
     </div>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <!-- core:js -->
     <script src="{{ asset('backend/assets/vendors/core/core.js') }}"></script>
     <!-- endinject -->
 
     <!-- Plugin js for this page -->
     <script src="{{ asset('backend/assets/vendors/flatpickr/flatpickr.min.js') }}"></script>
-    <script src="{{ asset('backendbackend/assets/vendors/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/vendors/apexcharts/apexcharts.min.js') }}"></script>
     <!-- End plugin js for this page -->
 
     <!-- inject:js -->
@@ -96,6 +85,9 @@
     <!-- Custom js for this page -->
     <script src="{{ asset('backend/assets/js/dashboard-dark.js') }}"></script>
     <!-- End custom js for this page -->
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <script>
         @if (Session::has('message'))
             var type = "{{ Session::get('alert-type', 'info') }}"
@@ -103,19 +95,43 @@
                 case 'info':
                     toastr.info(" {{ Session::get('message') }} ");
                     break;
+
                 case 'success':
                     toastr.success(" {{ Session::get('message') }} ");
                     break;
+
                 case 'warning':
                     toastr.warning(" {{ Session::get('message') }} ");
                     break;
+
                 case 'error':
                     toastr.error(" {{ Session::get('message') }} ");
                     break;
             }
         @endif
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="{{ asset('backend/assets/js/code/code.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/code/validate.min.js') }}"></script>
+    <!-- Start datatables -->
+    <script src="{{ asset('backend/assets/vendors/datatables.net/jquery.dataTables.js') }}"></script>
+    <script src="{{ asset('backend/assets/vendors/datatables.net-bs5/dataTables.bootstrap5.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/data-table.js') }}"></script>
+    <script src="{{ asset('backend/assets/vendors/inputmask/jquery.inputmask.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/vendors/select2/select2.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/inputmask.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/select2.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/typeahead.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/tags-input.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/dropzone.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/dropify.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/pickr.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/flatpickr.js') }}"></script>
+    <script src="{{ asset('backend/assets/vendors/typeahead.js/typeahead.bundle.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/vendors/jquery-tags-input/jquery.tagsinput.min.js') }}"></script>
+    {{-- <script src="{{ asset('backend/assets/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/lightbox-plus-jquery.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/script.js') }}"></script> --}}
 </body>
 
 </html>
-backend

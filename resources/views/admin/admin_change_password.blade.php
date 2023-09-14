@@ -70,16 +70,16 @@
                                         class="form-control  
                                          @error('old_password') is-invalid @enderror "
                                         id="old_password" autocomplete="off" ">
-     @error('old_password')
+         @error('old_password')
         <span class="text-danger">{{ $message }}</span>
     @enderror
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="exampleInputUsername1" class="form-label">new password</label>
-                                                            <input type="password" name="new_password"
-                                                                class="form-control  
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="exampleInputUsername1" class="form-label">new password</label>
+                                                                <input type="password" name="new_password"
+                                                                    class="form-control  
                                              @error('new_password') is-invalid @enderror "
-                                                                id="new_password" autocomplete="off" ">
+                                                                    id="new_password" autocomplete="off" ">
                                     @error('new_password')
                                         <span class="text-danger">
                                             {{ $message }}
@@ -90,23 +90,23 @@
                                     <label for="exampleInputUsername1" class="form-label">Confirm new password</label>
                                     <input type="password" name="new_password_confirmation" class="form-control"
                                         id="new_password_confirmation" autocomplete="off" ">
-                               
-                                </div>
-
-                                            <button type="submit" class="btn btn-primary me-2">Save Changes </button>
-
-                                        </form>
-
+                                   
                                     </div>
+
+                                                <button type="submit" class="btn btn-primary me-2">Save Changes </button>
+
+                                            </form>
+
+                                        </div>
+                                    </div>
+
                                 </div>
-
                             </div>
+                            <!-- middle wrapper end -->
+                            <!-- right wrapper start -->
+
+                            <!-- right wrapper end -->
                         </div>
-                        <!-- middle wrapper end -->
-                        <!-- right wrapper start -->
 
-                        <!-- right wrapper end -->
                     </div>
-
-                </div>
 @endsection
