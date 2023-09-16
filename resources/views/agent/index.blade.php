@@ -1,8 +1,18 @@
 @extends('agent.agent_dashboard')
 @section('agent')
+    @php
+        $id = Auth::user()->id;
+        $agentId = App\Models\User::find($id);
+        $agentstatus = $agentId->status;
+    @endphp
     <div class="page-content">
+        @if($agentstatus == 'active')
+        <h4>Agent Account Is <span class="text-success">Active</h4>
+    @else
+    <h4>Agent Account Is <span class="text-danger">Inactive</h4>
+        @endif
 
-        <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin"> 
+        <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
             <div>
                 <h4 class="mb-3 mb-md-0">Welcome to agent Dashboard</h4>
             </div>

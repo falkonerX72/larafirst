@@ -1,5 +1,5 @@
-@extends('admin.admin_dashboard')
-@section('admin')
+@extends('agent.agent_dashboard')
+@section('agent')
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 
     <div class="page-content">
@@ -18,7 +18,7 @@
                             <h6 class="card-title">Edit Property </h6>
 
 
-                            <form method="post" action="{{ route('update.property') }}" id="myForm"
+                            <form method="post" action="{{ route('agent.update.property') }}" id="myForm"
                                 enctype="multipart/form-data">
                                 @csrf
 
@@ -213,7 +213,7 @@
                                                 multiple="multiple" data-width="100%">
 
                                                 @foreach ($amenities as $ameni)
-                                                    <option value="{{ $ameni->amenities_name }}"
+                                                    <option value="{{ $ameni->amenities_name  }}"
                                                         {{ in_array($ameni->amenities_name, $property_ami) ? 'selected' : '' }}>
                                                         {{ $ameni->amenities_name }}</option>
                                                 @endforeach
@@ -221,19 +221,7 @@
                                             </select>
                                         </div>
                                     </div><!-- Col -->
-                                    <div class="col-sm-4">
-                                        <div class="mb-3">
-                                            <label class="form-label"> Agent </label>
-                                            <select name="agent_id" class="form-select" id="exampleFormControlSelect1">
-                                                <option selected="" disabled="">Select Agent</option>
-                                                @foreach ($activeAgent as $agent)
-                                                    <option value="{{ $agent->id }}"
-                                                        {{ $agent->id == $property->agent_id ? 'selected' : '' }}>
-                                                        {{ $agent->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div><!-- Col -->
+
 
 
                                 </div><!-- Row -->
@@ -324,7 +312,7 @@
                             <h6 class="card-title">Edit Main Thambnail Image </h6>
 
 
-                            <form method="post" action="{{ route('update.property.thambnail') }}" id="myForm"
+                            <form method="post" action="{{ route('agent.update.property.thambnail') }}" id="myForm"
                                 enctype="multipart/form-data">
                                 @csrf
 
@@ -377,7 +365,7 @@
                             <h6 class="card-title">Edit Multi Image </h6>
 
 
-                            <form method="post" action="{{ route('update.property.multiimage') }}" id="myForm"
+                            <form method="post" action="{{ route('agent.update.property.multiimage') }}" id="myForm"
                                 enctype="multipart/form-data">
                                 @csrf
 
@@ -412,7 +400,7 @@
                                                         <input type="submit" class="btn btn-primary px-4"
                                                             value="Update Image">
 
-                                                        <a href="{{ route('property.multiimage.delete', $img->id) }}"
+                                                        <a href="{{ route('agent.property.multiimg.delete', $img->id) }}"
                                                             class="btn btn-danger" id="delete">Delete </a>
                                                     </td>
                                                 </tr>
@@ -425,7 +413,7 @@
                             </form>
 
 
-                            <form method="post" action="{{ route('store.new.multiimage') }}" id="myForm"
+                            <form method="post" action="{{ route('agent.store.new.multiimage') }}" id="myForm"
                                 enctype="multipart/form-data">
                                 @csrf
 
@@ -476,7 +464,7 @@
                             <h6 class="card-title">Edit Property Facility </h6>
 
 
-                            <form method="post" action="{{ route('UpdatePropertyFacilities') }}" id="myForm"
+                            <form method="post" action="{{ route('agent.update.property.facilities') }}" id="myForm"
                                 enctype="multipart/form-data">
                                 @csrf
 
@@ -706,7 +694,7 @@
 
                     $.each(data, function(index, file) { //loop though each file
                         if (/(\.|\/)(gif|jpe?g|png|webp)$/i.test(file
-                                .type)) { //check supported file type
+                            .type)) { //check supported file type
                             var fRead = new FileReader(); //new filereader
                             fRead.onload = (function(file) { //trigger function on successful read
                                 return function(e) {
@@ -714,7 +702,7 @@
                                             e.target.result).width(100)
                                         .height(80); //create image element 
                                     $('#preview_img').append(
-                                        img); //append image to output element
+                                    img); //append image to output element
                                 };
                             })(file);
                             fRead.readAsDataURL(file); //URL representing the file's data.

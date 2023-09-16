@@ -129,9 +129,14 @@
     <script src="{{ asset('backend/assets/js/flatpickr.js') }}"></script>
     <script src="{{ asset('backend/assets/vendors/typeahead.js/typeahead.bundle.min.js') }}"></script>
     <script src="{{ asset('backend/assets/vendors/jquery-tags-input/jquery.tagsinput.min.js') }}"></script>
+ 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     {{-- <script src="{{ asset('backend/assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('backend/assets/js/lightbox-plus-jquery.min.js') }}"></script>
     <script src="{{ asset('backend/assets/js/script.js') }}"></script> --}}
+
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
 </body>
 
 </html>

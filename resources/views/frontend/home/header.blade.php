@@ -25,8 +25,8 @@
                         @elseif (Auth::user()->role == 'admin')
                             <a href="{{ route('admin.dashboard') }}"><i class="fa fa-superpowers" aria-hidden="true">
                                 </i>Dashboard</a>
-                        @elseif (Auth::user()->role == 'admin')
-                            <a href="{{ route('admin.dashboard') }}"><i class="fa fa-superpowers"></i>Dashboard</a>
+                        @elseif (Auth::user()->role == 'agent')
+                            <a href="{{ route('agent.dashboard') }}"><i class="fa fa-superpowers"></i>Dashboard</a>
                         @endif
 
                         <a href="{{ route('user.logout') }}"><i class="fa fa-sign-out"></i>logout</a>

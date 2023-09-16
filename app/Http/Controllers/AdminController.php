@@ -163,7 +163,87 @@ class AdminController extends Controller
 
         return redirect()->route('all.agent')->with($notification);
     } // End Method 
+    public function DeleteAgent($id)
+    {
+        $agentdata = User::findOrFail($id);
+        @unlink(public_path('upload/agent_images/' . $agentdata->photo));
+        User::findOrFail($id)->delete();;
 
+        $notification = array(
+            'message' => 'Agent Deleted Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);
+    } // End Method  
+
+    public function EditAgent($id)
+    {
+        $allagent = User::findOrFail($id);
+        return view('backend.agentuser.edit_agent', compact('allagent'));
+    }
+    public function UpdateAgent(Request $request)
+    {
+        $user_id = $request->id;
+        User::findOrFail($user_id)->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'address' => $request->address,
+
+        ]);
+        $notification = array(
+            'message' => 'Agent Created Successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('all.agent')->with($notification);
+    }
+    public function InactiveAgent(Request $request)
+    {
+
+        $aid = $request->id;
+        User::findOrFail($aid)->update([
+
+            'status' => 'inactive',
+
+        ]);
+
+        $notification = array(
+            'message' => 'Agent Inactive Successfully',
+            'alert-type' => 'success'
+        );
+
+        return with($notification);
+    } // End Method 
+    public function ActiveAgent(Request $request)
+    {
+
+        $aid = $request->id;
+        User::findOrFail($aid)->update([
+
+            'status' => 'active',
+
+        ]);
+
+        $notification = array(
+            'message' => 'Agent Activated Successfully',
+            'alert-type' => 'success'
+        );
+
+        return with($notification);
+    } // End Method 
+
+
+    public function changeStatus(Request $request)
+    {
+
+        $user = User::find($request->user_id);
+        $user->status = $request->status;
+        $user->save();
+
+        return response()->json(['success' => 'Status Change Successfully']);
+    } // End Method 
 
 
 }

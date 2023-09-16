@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('amenities', function (Blueprint $table) {
+        Schema::create('package_plans', function (Blueprint $table) {
             $table->id();
-            $table->string('amenities_name')->nullable();
+            $table->integer('user_id')->nullable();
+            $table->string('package_name')->nullable();
+            $table->string('package_credits')->nullable();
+            $table->string('package_amount')->nullable();
+
             $table->timestamps();
         });
     }
@@ -23,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('amenities');
+        Schema::dropIfExists('package_plans');
     }
 };

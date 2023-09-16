@@ -8,6 +8,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Backend\PropertyTypeController;
 use App\Http\Controllers\Backend\PropertyController;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Controllers\Agent;
+use App\Http\Controllers\Agent\AgentPropertyController;
 
 /*   
 |--------------------------------------------------------------------------
@@ -136,7 +138,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::post('/update/property/multiimage', 'UpdatePropertyMultiimage')->name('update.property.multiimage');
 
-        Route::get('/property/multiimg/delete/{id}', 'PropertyMultiImageDelete')->name('property.multiimg.delete');
+        Route::get('/property/multiimg/delete/{id}', 'PropertyMultiImageDelete')->name('property.multiimage.delete');
 
         Route::post('/store/new/multiimage', 'StoreNewMultiimage')->name('store.new.multiimage');
 
@@ -159,5 +161,51 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/all/agent', 'AllAgent')->name('all.agent');
         Route::get('/add/agent', 'AddAgent')->name('add.agent');
         Route::post('/store/agent', 'StoreAgent')->name('store.agent');
+        Route::get('/edit/agent/{id}', 'EditAgent')->name('edit.agent');
+        Route::post('/update/agent', 'UpdateAgent')->name('update.agent');
+        Route::get('/delete/agent/{id}', 'DeleteAgent')->name('delete.agent');
+        Route::post('/inactive/agent', 'InactiveAgent')->name('inactive.agent');
+        Route::get('/changeStatus', 'changeStatus');
     });
 }); // End Group Admin Middleware x  
+
+//  agent all property
+Route::middleware(['auth', 'role:agent'])->group(function () {
+    Route::controller(AgentPropertyController::class)->group(function () {
+
+        Route::get('/agent/all/property', 'AgentAllProperty')->name('agent.all.property');
+        Route::get('/agent/add/property', 'AgentAddProperty')->name('agent.add.property');
+
+        Route::post('/agent/store/property', 'AgentStoreProperty')->name('agent.store.property');
+
+        Route::get('/agent/edit/property/{id}', 'AgentEditProperty')->name('agent.edit.property');
+
+        Route::post('/agent/update/property', 'AgentUpdateProperty')->name('agent.update.property');
+
+        Route::post('/agent/update/property/thambnail', 'AgentUpdatePropertyThambnail')->name('agent.update.property.thambnail');
+
+        Route::post('/agent/update/property/multiimage', 'AgentUpdatePropertyMultiimage')->name('agent.update.property.multiimage');
+
+        Route::get('/agent/property/multiimg/delete/{id}', 'AgentPropertyMultiimgDelete')->name('agent.property.multiimg.delete');
+
+        Route::post('/agent/store/new/multiimage', 'AgentStoreNewMultiimage')->name('agent.store.new.multiimage');
+
+        Route::post('/agent/update/property/facilities', 'AgentUpdatePropertyFacilities')->name('agent.update.property.facilities');
+
+        Route::get('/agent/details/property/{id}', 'AgentDetailsProperty')->name('agent.details.property');
+
+        Route::get('/agent/delete/property/{id}', 'AgentDeleteProperty')->name('agent.delete.property');
+    });
+});
+
+
+
+//  agent buy package
+Route::middleware(['auth', 'role:agent'])->group(function () {
+
+    Route::controller(AgentPropertyController::class)->group(function () {
+
+
+        Route::get('/buy/package', 'BuyPackage')->name('buy.package');
+    });
+});
