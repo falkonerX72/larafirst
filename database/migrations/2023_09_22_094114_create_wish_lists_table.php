@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('package_plans', function (Blueprint $table) {
+        Schema::create('wishlists', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->nullable();
-            $table->string('package_name')->nullable();
-            $table->string('invoice')->nullable();
-            $table->string('package_credits')->nullable();
-            $table->string('package_amount')->nullable();
-
+            $table->unsignedBigInteger('user_id')->nullable();
+            //unsignedBigInteger no negative value
+            $table->unsignedBigInteger('property_id')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('package_plans');
+        Schema::dropIfExists('wishlists');
     }
 };

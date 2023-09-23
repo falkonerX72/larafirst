@@ -53,6 +53,12 @@
                         <span class="link-title">buy package</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('package.history') }}" class="nav-link">
+                        <i class="link-icon" data-feather="calendar"></i>
+                        <span class="link-title">package History</span>
+                    </a>
+                </li>
 
                 <li class="nav-item nav-category">Components</li>
                 <li class="nav-item">

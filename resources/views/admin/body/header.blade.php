@@ -268,6 +268,12 @@
                             </a>
                         </li>
                         <li class="dropdown-item py-2">
+                            <a href="http://127.0.0.1:8000/" class="text-body ms-0">
+                                <i class="me-2 icon-md" data-feather="edit"></i>
+                                <span>web view</span>
+                            </a>
+                        </li>
+                        <li class="dropdown-item py-2">
                             <a href="javascript:;" class="text-body ms-0">
                                 <i class="me-2 icon-md" data-feather="repeat"></i>
                                 <span>Switch User</span>

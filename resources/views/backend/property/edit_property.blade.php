@@ -412,7 +412,7 @@
                                                         <input type="submit" class="btn btn-primary px-4"
                                                             value="Update Image">
 
-                                                        <a href="{{ route('property.multiimage.delete', $img->id) }}"
+                                                        <a href="{{ route('property.multiimg.delete', $img->id) }}"
                                                             class="btn btn-danger" id="delete">Delete </a>
                                                     </td>
                                                 </tr>
@@ -476,7 +476,7 @@
                             <h6 class="card-title">Edit Property Facility </h6>
 
 
-                            <form method="post" action="{{ route('UpdatePropertyFacilities') }}" id="myForm"
+                            <form method="post" action="{{ route('update.property.facilities') }}" id="myForm"
                                 enctype="multipart/form-data">
                                 @csrf
 
@@ -706,7 +706,7 @@
 
                     $.each(data, function(index, file) { //loop though each file
                         if (/(\.|\/)(gif|jpe?g|png|webp)$/i.test(file
-                                .type)) { //check supported file type
+                            .type)) { //check supported file type
                             var fRead = new FileReader(); //new filereader
                             fRead.onload = (function(file) { //trigger function on successful read
                                 return function(e) {
@@ -714,7 +714,7 @@
                                             e.target.result).width(100)
                                         .height(80); //create image element 
                                     $('#preview_img').append(
-                                        img); //append image to output element
+                                    img); //append image to output element
                                 };
                             })(file);
                             fRead.readAsDataURL(file); //URL representing the file's data.

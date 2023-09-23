@@ -80,9 +80,9 @@
             </li>
 
             <li class="nav-item">
-                <a href="pages/apps/calendar.html" class="nav-link">
+                <a href="{{ route('admin.package.history') }}" class="nav-link">
                     <i class="link-icon" data-feather="calendar"></i>
-                    <span class="link-title">Calendar</span>
+                    <span class="link-title">package History</span>
                 </a>
             </li>
 

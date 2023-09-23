@@ -45,7 +45,7 @@
         <div class="outer-box">
             <div class="main-box">
                 <div class="logo-box">
-                    <figure class="logo"><a href="index.html"><img
+                    <figure class="logo"><a href="http://127.0.0.1:8000"><img
                                 src="{{ asset('frontend/assets/images/logo.png') }}" alt=""></a>
                     </figure>
                 </div>

@@ -8,8 +8,11 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Backend\PropertyTypeController;
 use App\Http\Controllers\Backend\PropertyController;
 use App\Http\Middleware\RedirectIfAuthenticated;
-use App\Http\Controllers\Agent;
+
 use App\Http\Controllers\Agent\AgentPropertyController;
+use App\Http\Controllers\Frontend\IndexController;
+use App\Http\Controllers\Frontend\WishListController;
+use App\Models\Wishlist;
 
 /*   
 |--------------------------------------------------------------------------
@@ -46,6 +49,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/change/password', [UserController::class, 'UserChangePassword'])->name('user.change.password');
 
     Route::post('/user/password/update', [UserController::class, 'UserPasswordUpdate'])->name('user.password.update');
+
+    //user wish list all route
+    Route::controller(WishlistController::class)->group(function () {
+        Route::get('/user/wishlist', 'UserWishList')->name('user.wishlist');
+        Route::get('/get-wishlist-property', 'GetWishlistProperty');
+        Route::get('/wishlist-remove/{id}', 'WishlistRemove');
+    });
 });
 
 require __DIR__ . '/auth.php';
@@ -138,7 +148,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::post('/update/property/multiimage', 'UpdatePropertyMultiimage')->name('update.property.multiimage');
 
-        Route::get('/property/multiimg/delete/{id}', 'PropertyMultiImageDelete')->name('property.multiimage.delete');
+        Route::get('/property/multiimg/delete/{id}', 'PropertyMultiImageDelete')->name('property.multiimg.delete');
 
         Route::post('/store/new/multiimage', 'StoreNewMultiimage')->name('store.new.multiimage');
 
@@ -151,6 +161,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/inactive/property', 'InactiveProperty')->name('inactive.property');
 
         Route::post('/active/property', 'ActiveProperty')->name('active.property');
+
+        Route::get('/admin/package/history', 'AdminPackageHistory')->name('admin.package.history');
+
+        Route::get('/package/invoice/{id}', 'PackageInvoice')->name('package.invoice');
     });
 
 
@@ -164,13 +178,20 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/edit/agent/{id}', 'EditAgent')->name('edit.agent');
         Route::post('/update/agent', 'UpdateAgent')->name('update.agent');
         Route::get('/delete/agent/{id}', 'DeleteAgent')->name('delete.agent');
-        Route::post('/inactive/agent', 'InactiveAgent')->name('inactive.agent');
+
         Route::get('/changeStatus', 'changeStatus');
     });
-}); // End Group Admin Middleware x  
+}); // End Group Admin Middleware
 
-//  agent all property
+
+
+
+
+
+/// Agent Group Middleware 
 Route::middleware(['auth', 'role:agent'])->group(function () {
+
+    // Agent All Property  
     Route::controller(AgentPropertyController::class)->group(function () {
 
         Route::get('/agent/all/property', 'AgentAllProperty')->name('agent.all.property');
@@ -196,16 +217,30 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
 
         Route::get('/agent/delete/property/{id}', 'AgentDeleteProperty')->name('agent.delete.property');
     });
-});
 
 
 
-//  agent buy package
-Route::middleware(['auth', 'role:agent'])->group(function () {
-
+    // Agent Buy Package Route from admin 
     Route::controller(AgentPropertyController::class)->group(function () {
 
-
         Route::get('/buy/package', 'BuyPackage')->name('buy.package');
+        Route::get('/buy/business/plan', 'BuyBusinessPlan')->name('buy.business.plan');
+        Route::post('/store/business/plan', 'StoreBusinessPlan')->name('store.business.plan');
+
+        Route::get('/buy/professional/plan', 'BuyProfessionalPlan')->name('buy.professional.plan');
+        Route::post('/store/professional/plan', 'StoreProfessionalPlan')->name('store.professional.plan');
+
+
+        Route::get('/package/history', 'PackageHistory')->name('package.history');
+        Route::get('/agent/package/invoice/{id}', 'AgentPackageInvoice')->name('agent.package.invoice');
     });
-});
+}); // End Group Agent Middleware
+
+/// frontend property deatils
+
+
+Route::get('/property/details/{id}/{slug}', [IndexController::class, 'PropertyDetails']);
+
+//wish list ADD route
+
+Route::post('/add-to-wishList/{property_id}', [WishlistController::class, 'AddToWishList']);

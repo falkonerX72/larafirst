@@ -1,3 +1,11 @@
+@php
+    
+    $ptype = App\Models\PropertyType::latest()
+        ->limit(5)
+        ->get();
+    
+@endphp
+
 <section class="banner-section" style="background-image: url({{ asset('frontend/assets/images/banner/banner-1.jpg') }});">
     <div class="auto-container">
         <div class="inner-container">
@@ -52,10 +60,9 @@
                                                     <div class="select-box">
                                                         <select class="wide">
                                                             <option data-display="All Type">All Type</option>
-                                                            <option value="1">Laxury</option>
-                                                            <option value="2">Classic</option>
-                                                            <option value="3">Modern</option>
-                                                            <option value="4">New</option>
+                                                            @foreach ($ptype as $item)
+                                                                <option value="1">{{ $item->type_name }}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
@@ -232,10 +239,9 @@
                                                     <div class="select-box">
                                                         <select class="wide">
                                                             <option data-display="All Type">All Type</option>
-                                                            <option value="1">Laxury</option>
-                                                            <option value="2">Classic</option>
-                                                            <option value="3">Modern</option>
-                                                            <option value="4">New</option>
+                                                            @foreach ($ptype as $item)
+                                                                <option value="1">{{ $item->type_name }}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                 </div>

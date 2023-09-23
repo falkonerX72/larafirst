@@ -11,6 +11,8 @@
     <!-- Fav Icon -->
     <link rel="icon" href="{{ asset('frontend/assets/images/favicon.ico') }}" type="image/x-icon">
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- Google Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
@@ -29,7 +31,9 @@
     <link href="{{ asset('frontend/assets/css/switcher-style.css') }}" rel="stylesheet">
     <link href="{{ asset('frontend/assets/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('frontend/assets/css/responsive.css') }}" rel="stylesheet">
+
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+
 
 </head>
 
@@ -91,11 +95,18 @@
     <script src="{{ asset('frontend/assets/js/jquery-ui.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/nav-tool.js') }}"></script>
 
+    <!-- map script -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-CE0deH3Jhj6GN4YvdCFZS7DpbXexzGU"></script>
+    <script src="{{ asset('frontend/assets/js/gmaps.js') }}"></script>
+    <script src="{{ asset('frontend/assets/js/map-helper.js') }}"></script>
+
+
     <!-- main-js -->
     <script src="{{ asset('frontend/assets/js/script.js') }}"></script>
-    <script src="{{ asset('backend/assets/js/dashboard-dark.js') }}"></script>
-    <!-- End custom js for this page -->
+
+
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <script>
         @if (Session::has('message'))
             var type = "{{ Session::get('alert-type', 'info') }}"
@@ -103,18 +114,182 @@
                 case 'info':
                     toastr.info(" {{ Session::get('message') }} ");
                     break;
+
                 case 'success':
                     toastr.success(" {{ Session::get('message') }} ");
                     break;
+
                 case 'warning':
                     toastr.warning(" {{ Session::get('message') }} ");
                     break;
+
                 case 'error':
                     toastr.error(" {{ Session::get('message') }} ");
                     break;
             }
         @endif
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script type="text/javascript">
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        })
+
+        // Add To Wishlist 
+        function addToWishList(property_id) {
+            $.ajax({
+                type: "POST",
+                dataType: 'json',
+                url: "/add-to-wishList/" + property_id,
+
+                success: function(data) {
+                    wishlist();
+                    // Start Message 
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+
+                        showConfirmButton: false,
+                        timer: 3000
+                    })
+                    if ($.isEmptyObject(data.error)) {
+
+                        Toast.fire({
+                            type: 'success',
+                            icon: 'success',
+                            title: data.success,
+                        })
+
+                    } else {
+
+                        Toast.fire({
+                            type: 'error',
+                            icon: 'error',
+                            title: data.error,
+                        })
+                    }
+
+                    // End Message  
+
+                }
+            })
+
+        }
+    </script>
+
+    <!-- // start load Wishlist Data  -->
+
+    <script type="text/javascript">
+        function wishlist() {
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: "/get-wishlist-property/",
+
+                success: function(response) {
+                    wishlist();
+                    $('#wishQty').text(response.wishQty);
+
+                    var rows = ""
+                    $.each(response.wishlist, function(key, value) {
+
+                        rows += `<div class="deals-block-one">
+            <div class="inner-box" style="min-height:auto !important">
+                <div class="image-box">
+                    <figure class="image"><img src="/${value.property.property_thambnail}" alt=""></figure>
+                    <div class="batch"><i class="icon-11"></i></div>
+                    <span class="category">Featured</span>
+                    <div class="buy-btn"><a href="#">For ${value.property.property_status}</a></div>
+                </div>
+                <div class="lower-content">
+                    <div class="title-text"><h4><a href="../property/details/${value.property.id}/${value.property.property_slug}">${value.property.property_name}</a></h4></div>
+                    <div class="price-box clearfix">
+                        <div class="price-info pull-left">
+                            <h6>Start From</h6>
+                            <h4>$${value.property.lowest_price}</h4>
+                        </div>
+                         
+                    </div>
+                   
+                    <ul class="more-details clearfix">
+                        <li><i class="icon-14"></i>${value.property.bedrooms} Beds</li>
+                        <li><i class="icon-15"></i>${value.property.    bathrooms} Baths</li>
+                        <li><i class="icon-16"></i>${value.property.    property_size} Sq Ft</li>
+                    </ul>
+                    <div class="other-info-box clearfix">
+                        
+                        <ul class="other-option pull-right clearfix">
+                           
+           <li><a type="submit" class="text-body" id="${value.id}" onclick="wishlistRemove(this.id)" ><i class="fa fa-trash"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div> `
+                    });
+
+                    $('#wishlist').html(rows);
+                }
+            })
+        }
+
+        wishlist();
+
+
+        // Wishlist Remove Start 
+
+        function wishlistRemove(id) {
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: "/wishlist-remove/" + id,
+
+                success: function(data) {
+                    wishlist();
+
+                    // Start Message 
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+
+                        showConfirmButton: false,
+                        timer: 3000
+                    })
+                    if ($.isEmptyObject(data.error)) {
+
+                        Toast.fire({
+                            type: 'success',
+                            icon: 'success',
+                            title: data.success,
+                        })
+
+                    } else {
+
+                        Toast.fire({
+                            type: 'error',
+                            icon: 'error',
+                            title: data.error,
+                        })
+                    }
+
+                    // End Message  
+
+
+                }
+            })
+
+        }
+
+        /// End Wishlist Remove 
+    </script>
+
+
 </body><!-- End of .page_wrapper -->
 
 </html>

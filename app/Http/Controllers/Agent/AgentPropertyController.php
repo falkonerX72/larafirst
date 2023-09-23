@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Agent;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Property;
 use App\Models\MultiImage;
 use App\Models\Facility;
+use App\Models\PackagePlan;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Amenities;
 use App\Models\PropertyType;
 use App\Models\User;
@@ -14,6 +17,7 @@ use Intervention\Image\Facades\Image;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+
 
 class AgentPropertyController extends Controller
 {
@@ -32,12 +36,32 @@ class AgentPropertyController extends Controller
         $propertytype = PropertyType::latest()->get();
         $amenities = Amenities::latest()->get();
 
-        return view('agent.property.add_property', compact('propertytype', 'amenities'));
+        $id = Auth::user()->id;
+        $propertylimit = User::where('role', 'agent')->where('id', $id)->first();
+        $pcount = $propertylimit->credit;
+        // dd($pcount);
+        if ($pcount == 1 || $pcount == 7) {
+
+            $notification = array(
+                'message' => 'your property limit has reached!',
+                'alert-type' => 'success'
+            );
+            return redirect()->route('buy.package')->with($notification);
+        } else {
+            $notification = array(
+                'message' => 'Property can be added Successfully',
+                'alert-type' => 'success'
+            );
+            return view('agent.property.add_property', compact('propertytype', 'amenities'))->with($notification);
+        }
     } // End Method 
 
 
     public function AgentStoreProperty(Request $request)
     {
+        $id = Auth::user()->id;
+        $uid = User::findOrFail($id);
+        $nid = $uid->credit;
 
         $amen = $request->amenities_id;
         $amenites = implode(",", $amen);
@@ -123,7 +147,9 @@ class AgentPropertyController extends Controller
         }
 
         /// End Facilities  ////
-
+        User::where('id', $id)->update([
+            'credit' => DB::raw('1 +' . $nid),
+        ]);
 
         $notification = array(
             'message' => 'Property Inserted Successfully',
@@ -389,6 +415,94 @@ class AgentPropertyController extends Controller
 
         return view('agent.package.buy_package');
     } // End Method  
+    public function BuyBusinessPlan()
+    {
+        $id = Auth::user()->id;
+        $data = User::find($id);
+        return view('agent.package.business_plan', compact('data'));
+    }
 
 
+
+
+    public function StoreBusinessPlan(Request $request)
+    {
+        $id = Auth::user()->id;
+        $uid = User::findOrFail($id);
+        $nid = $uid->credit;
+
+        PackagePlan::insert([
+            'user_id' => $id,
+            'package_name' => 'Business',
+            'package_credits' => '3',
+            'invoice' => 'ERS' . mt_rand(10000000, 99999999),
+            'package_amount' => '20',
+            'created_at' => Carbon::now(),
+        ]);
+
+        User::where('id', $id)->update([
+            'credit' => DB::raw('3 +' . $nid),
+        ]);
+
+        $notification = array(
+            'message' => 'Property Deleted Successfully',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('agent.all.property')->with($notification);
+    }
+
+    public function BuyProfessionalPlan()
+    {
+        $id = Auth::user()->id;
+        $data = User::find($id);
+        return view('agent.package.professional_plan', compact('data'));
+    }
+
+
+    public function StoreProfessionalPlan(Request $request)
+    {
+        $id = Auth::user()->id;
+        $uid = User::findOrFail($id);
+        $nid = $uid->credit;
+
+        PackagePlan::insert([
+            'user_id' => $id,
+            'package_name' => 'Professinal',
+            'package_credits' => '10',
+            'invoice' => 'ERS' . mt_rand(10000000, 99999999),
+            'package_amount' => '20',
+            'created_at' => Carbon::now(),
+        ]);
+
+        User::where('id', $id)->update([
+            'credit' => DB::raw('10 +' . $nid),
+        ]);
+
+        $notification = array(
+            'message' => 'pro plan added successfully',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('agent.all.property')->with($notification);
+    } //end
+
+    public function PackageHistory()
+    {
+        $id = Auth::user()->id;
+        $packagehistory = PackagePlan::where('user_id', $id)->get();
+
+        return view('agent.package.package_history', compact('packagehistory'));
+    } //end method
+
+
+    public function AgentPackageInvoice($id)
+    {
+        $packagehistory = PackagePlan::where('id', $id)->first();
+
+        $pdf = Pdf::loadView('agent.package.package_history_invoice', compact('packagehistory'))->setPaper('a4')->setOption([
+            'tempDir' => public_path(),
+            'chroot' => public_path(),
+        ]);
+
+        return $pdf->download('invoice.pdf');
+    } //end method
 }
