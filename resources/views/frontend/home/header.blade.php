@@ -110,7 +110,7 @@
                                                     <li><a href="services.html">Our Services</a></li>
                                                     <li><a href="faq.html">Faq's Page</a></li>
                                                     <li><a href="pricing.html">Pricing Table</a></li>
-                                                    <li><a href="compare-roperties.html">Compare Properties</a>
+                                                    <li><a href="{{ url('user/compare') }}">Compare Properties</a>
                                                     </li>
                                                     <li><a href="categories.html">Categories Page</a></li>
                                                     <li><a href="career.html">Career Opportunity</a></li>
@@ -182,7 +182,7 @@
         <div class="outer-box">
             <div class="main-box">
                 <div class="logo-box">
-                    <figure class="logo"><a href="index.html"><img
+                    <figure class="logo"><a href="{{ url('/') }}"><img
                                 src="{{ asset('frontend/assets/images/logo.png') }}" alt=""></a>
                     </figure>
                 </div>

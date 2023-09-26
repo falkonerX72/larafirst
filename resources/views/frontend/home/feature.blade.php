@@ -18,10 +18,13 @@
 
             @foreach ($property as $item)
                 @php
-                    $userid = Auth::user()->id;
-                    $exists = App\Models\Wishlist::where('user_id', $userid)
-                        ->where('property_id', $item->id)
-                        ->first();
+                    if (Auth::check()) {
+                        $userid = Auth::user()->id;
+                    
+                        $exists = App\Models\Wishlist::where('user_id', $userid)
+                            ->where('property_id', $item->id)
+                            ->first();
+                    }
                 @endphp
                 <div class="col-lg-4 col-md-6 col-sm-12 feature-block">
                     <div class="feature-block-one wow fadeInUp animated" data-wow-delay="00ms" data-wow-duration="1500ms">
@@ -58,15 +61,18 @@
                                 </div>
                                 <div class="price-box clearfix">
                                     <div class="price-info pull-left">
+
                                         <h6>lowest price</h6>
                                         <h4>${{ $item->lowest_price }}</h4>
                                     </div>
                                     <ul class="other-option pull-right clearfix">
-                                        <li><a href="property-details.html"><i class="icon-12"></i></a></li>
-                                        <li><a aria-label="Add To Wishlist" class="action-btn" id="{{ $item->id }}"
-                                                onclick="addToWishList(this.id)">
-                                         
-                                                @if ($exists)
+                                        <li><a type="submit" aria-label="Add To Compare" class="action-btn"
+                                                id="{{ $item->id }}" onclick="addToCompare(this.id)"><i
+                                                    class="icon-12"></i></a></li>
+                                        <li><a type="submit" aria-label="Add To Wishlist" class="action-btn"
+                                                id="{{ $item->id }}" onclick="addToWishList(this.id)">
+
+                                                @if (Auth::check() && $exists)
                                                     <i class="fas fa-heart  text-danger"></i>
                                                 @else
                                                     <i class="fas fa-heart  "></i>
