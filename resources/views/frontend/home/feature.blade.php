@@ -63,7 +63,7 @@
                                     <div class="price-info pull-left">
 
                                         <h6>lowest price</h6>
-                                        <h4>${{ $item->lowest_price }}</h4>
+                                        <h4>{{ $item->lowest_price }}</h4>
                                     </div>
                                     <ul class="other-option pull-right clearfix">
                                         <li><a type="submit" aria-label="Add To Compare" class="action-btn"

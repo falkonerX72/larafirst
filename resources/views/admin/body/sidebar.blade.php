@@ -75,7 +75,7 @@
                             <a href="{{ route('add.property') }}" class="nav-link">Add property</a>
                         </li>
 
-                    </ul>
+                    </ul> 
                 </div>
             </li>
 
@@ -85,7 +85,12 @@
                     <span class="link-title">package History</span>
                 </a>
             </li>
-
+            <li class="nav-item">
+                <a href="{{ route('admin.property.message') }}" class="nav-link">
+                    <i class="link-icon" data-feather="calendar"></i>
+                    <span class="link-title">property message</span>
+                </a>
+            </li>
             <li class="nav-item nav-category">User All Function</li>
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="collapse" href="#uiComponents" role="button" aria-expanded="false"
@@ -97,7 +102,7 @@
                 <div class="collapse" id="uiComponents">
                     <ul class="nav sub-menu">
                         <li class="nav-item">
-                            <a href="{{route('all.agent')}}" class="nav-link">All Agent </a>
+                            <a href="{{ route('all.agent') }}" class="nav-link">All Agent </a>
                         </li>
                         <li class="nav-item">
                             <a href="pages/ui-components/alerts.html" class="nav-link">Add Agent</a>
@@ -107,8 +112,8 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#advancedUI" role="button" aria-expanded="false"
-                    aria-controls="advancedUI">
+                <a class="nav-link" data-bs-toggle="collapse" href="#advancedUI" role="button"
+                    aria-expanded="false" aria-controls="advancedUI">
                     <i class="link-icon" data-feather="anchor"></i>
                     <span class="link-title">Advanced UI</span>
                     <i class="link-arrow" data-feather="chevron-down"></i>

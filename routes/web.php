@@ -171,6 +171,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/package/history', 'AdminPackageHistory')->name('admin.package.history');
 
         Route::get('/package/invoice/{id}', 'PackageInvoice')->name('package.invoice');
+        Route::get('/admint/property/message/', 'AdminPropertyMessage')->name('admin.property.message');
+
+        Route::get('/admin/message/details/{id}', 'AdminMessageDetails')->name('admin.message.details');
     });
 
 
@@ -222,6 +225,11 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
         Route::get('/agent/details/property/{id}', 'AgentDetailsProperty')->name('agent.details.property');
 
         Route::get('/agent/delete/property/{id}', 'AgentDeleteProperty')->name('agent.delete.property');
+
+        //check msg
+        Route::get('/agent/property/message/', 'AgentPropertyMessage')->name('agent.property.message');
+
+        Route::get('/agent/message/details/{id}', 'AgentMessageDetails')->name('agent.message.details');
     });
 
 
@@ -242,13 +250,24 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
     });
 }); // End Group Agent Middleware
 
-/// frontend property deatils
-
+/// frontend property details
 
 Route::get('/property/details/{id}/{slug}', [IndexController::class, 'PropertyDetails']);
+
+//send msg from pro-details page
+
+Route::post('/property/message', [IndexController::class, 'PropertyMessage'])->name('property.message');
 
 //wish list ADD route
 
 Route::post('/add-to-wishList/{property_id}', [WishlistController::class, 'AddToWishList']);
+
 // compareADD route
+
 Route::post('/add-to-compare/{property_id}', [CompareController::class, 'addToCompare']);
+
+//agent details
+
+route::get('/agent/details/{id}', [IndexController::class, 'AgentDetails'])->name('agent.details');
+// Agent Details Page in Frontend 
+Route::get('/agent/details/{id}', [IndexController::class, 'AgentDetails'])->name('agent.details');
