@@ -13,6 +13,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Amenities;
 use App\Models\PropertyType;
 use App\Models\PropertyMessage;
+use App\Models\State;
 use App\Models\User;
 use Intervention\Image\Facades\Image;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
@@ -33,7 +34,7 @@ class AgentPropertyController extends Controller
 
     public function AgentAddProperty()
     {
-
+        $pstate = State::latest()->get();
         $propertytype = PropertyType::latest()->get();
         $amenities = Amenities::latest()->get();
 
@@ -53,7 +54,7 @@ class AgentPropertyController extends Controller
                 'message' => 'Property can be added Successfully',
                 'alert-type' => 'success'
             );
-            return view('agent.property.add_property', compact('propertytype', 'amenities'))->with($notification);
+            return view('agent.property.add_property', compact('propertytype', 'amenities', 'pstate'))->with($notification);
         }
     } // End Method 
 
@@ -166,7 +167,7 @@ class AgentPropertyController extends Controller
 
         $facilities = Facility::where('property_id', $id)->get();
         $property = Property::findOrFail($id);
-
+        $pstate = State::latest()->get();
         $type = $property->amenities_id;
         $property_ami = explode(',', $type);
 
@@ -175,7 +176,7 @@ class AgentPropertyController extends Controller
         $propertytype = PropertyType::latest()->get();
         $amenities = Amenities::latest()->get();
 
-        return view('agent.property.edit_property', compact('property', 'propertytype', 'amenities', 'property_ami', 'multiImage', 'facilities'));
+        return view('agent.property.edit_property', compact('property', 'propertytype', 'amenities', 'property_ami', 'multiImage', 'facilities', 'pstate'));
     } // End Method 
 
 

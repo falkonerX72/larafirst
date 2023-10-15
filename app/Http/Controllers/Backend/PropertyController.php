@@ -17,6 +17,7 @@ use Intervention\Image\Facades\Image;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Carbon\Carbon;
 use App\Models\PackagePlan;
+use App\Models\State;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class PropertyController extends Controller
@@ -34,9 +35,10 @@ class PropertyController extends Controller
     {
 
         $propertytype = PropertyType::latest()->get();
+        $pstate = State::latest()->get();
         $amenities = Amenities::latest()->get();
         $activeAgent = User::where('status', 'active')->where('role', 'agent')->latest()->get();
-        return view('backend.property.add_property', compact('propertytype', 'amenities', 'activeAgent'));
+        return view('backend.property.add_property', compact('propertytype', 'amenities', 'activeAgent', 'pstate'));
     } // End Method 
 
 
@@ -146,14 +148,14 @@ class PropertyController extends Controller
 
         $type = $property->amenities_id;
         $property_ami = explode(',', $type);
-
+        $pstate = State::latest()->get();
         $multiImage = MultiImage::where('property_id', $id)->get();
 
         $propertytype = PropertyType::latest()->get();
         $amenities = Amenities::latest()->get();
         $activeAgent = User::where('status', 'active')->where('role', 'agent')->latest()->get();
 
-        return view('backend.property.edit_property', compact('property', 'propertytype', 'amenities', 'activeAgent', 'property_ami', 'multiImage', 'facilities'));
+        return view('backend.property.edit_property', compact('property', 'propertytype', 'amenities', 'activeAgent', 'property_ami', 'multiImage', 'facilities', 'pstate'));
     } // End Method 
 
 
@@ -382,12 +384,9 @@ class PropertyController extends Controller
 
         $facilities = Facility::where('property_id', $id)->get();
         $property = Property::findOrFail($id);
-
         $type = $property->amenities_id;
         $property_ami = explode(',', $type);
-
         $multiImage = MultiImage::where('property_id', $id)->get();
-
         $propertytype = PropertyType::latest()->get();
         $amenities = Amenities::latest()->get();
         $activeAgent = User::where('status', 'active')->where('role', 'agent')->latest()->get();

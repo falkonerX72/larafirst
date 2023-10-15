@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BlogPost;
 use Illuminate\Http\Request;
+use App\Models\PropertyType;
+use App\Models\BlogCategory;
+
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -11,7 +15,12 @@ class UserController extends Controller
 {
     public function Index()
     {
-        return view('frontend.index');
+        $pcategory = PropertyType::latest()
+            ->limit(5)
+            ->get();
+
+        $blog_posts = BlogPost::latest()->limit(3)->get();
+        return view('frontend.index', compact('pcategory', 'blog_posts'));
     } // End Method 
 
 
