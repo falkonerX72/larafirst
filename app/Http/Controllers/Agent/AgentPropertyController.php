@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Property;
 use App\Models\MultiImage;
+use App\Models\Schedule;
 use App\Models\Facility;
 use App\Models\PackagePlan;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -19,6 +20,9 @@ use Intervention\Image\Facades\Image;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ScheduleMail;
+
 
 
 class AgentPropertyController extends Controller
@@ -524,4 +528,59 @@ class AgentPropertyController extends Controller
 
         return view('agent.message.message_details', compact('usermsg', 'msgdetails'));
     }
+    public function AgentScheduleRequest()
+    {
+
+        $id = auth::user()->id;
+        $usertour = Schedule::where('agent_id', $id)->get();
+        return  view('agent.schedule.schedule_request', compact('usertour'));
+    }
+
+    public function AgentDetailsSchedule($id)
+    {
+
+        $schedule = Schedule::findOrFail($id);
+        return view('agent.schedule.schedule_details', compact('schedule'));
+    } // End Method 
+    public function AgentUpdateSchedule(Request $request)
+    {
+
+        $sid = $request->id;
+        $schedulestatus =   schedule::findOrfail($sid);
+        if ($schedulestatus->status == 0) {
+
+            schedule::where('id', $sid)->update([
+                'status' => '1',
+            ]);
+            // start sending Email
+
+            $sendmail = Schedule::findOrFail($sid);
+            $data = [
+                'tour_date' => $sendmail->tour_data,
+                'tour_time' => $sendmail->tour_time,
+
+            ];
+            Mail::to($request->email)->send(new ScheduleMail($data));
+
+
+
+            //end sending Email
+            $notification = array(
+                'message' => 'status updated ',
+                'alert-type' => 'success'
+            );
+            return redirect()->route('agent.schedule.request')->with($notification);
+        } else {
+            schedule::where('id', $sid)->update([
+                'status' => '0',
+            ]);
+            $notification = array(
+                'message' => 'its 0 now!',
+                'alert-type' => 'success'
+            );
+            return redirect()->route('agent.schedule.request')->with($notification);
+        }
+    } //end
+
+
 }

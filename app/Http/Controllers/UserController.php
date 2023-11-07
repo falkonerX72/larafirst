@@ -6,6 +6,8 @@ use App\Models\BlogPost;
 use Illuminate\Http\Request;
 use App\Models\PropertyType;
 use App\Models\BlogCategory;
+use App\Models\Schedule;
+use App\Models\SiteSetting;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -18,9 +20,9 @@ class UserController extends Controller
         $pcategory = PropertyType::latest()
             ->limit(5)
             ->get();
-
+        $sitesetting = SiteSetting::find(1);
         $blog_posts = BlogPost::latest()->limit(3)->get();
-        return view('frontend.index', compact('pcategory', 'blog_posts'));
+        return view('frontend.index', compact('pcategory', 'blog_posts', 'sitesetting'));
     } // End Method 
 
 
@@ -122,6 +124,15 @@ class UserController extends Controller
         );
 
         return back()->with($notification);
+    } // End Method 
+
+    public function UserScheduleRequest()
+    {
+
+        $id = Auth::user()->id;
+        $userData = User::find($id);
+        $srequest = schedule::where('user_id', $id)->get();
+        return view('frontend.message.schedule_request', compact('userData', 'srequest'));
     } // End Method 
 
 

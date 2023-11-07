@@ -11,7 +11,7 @@
     </div>
     <div class="sidebar-body">
         <ul class="nav">
-            <li class="nav-item nav-category">Main</li>
+            <li class="nav-item nav-category">Mainss</li>
             <li class="nav-item">
                 <a href="{{ route('admin.dashboard') }}" class="nav-link">
                     <i class="link-icon" data-feather="box"></i>
@@ -110,6 +110,24 @@
                     <span class="link-title">property message</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('admin.blog.comment') }}" class="nav-link">
+                    <i class="link-icon" data-feather="calendar"></i>
+                    <span class="link-title">Blog comment</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('smtp.setting') }}" class="nav-link">
+                    <i class="link-icon" data-feather="calendar"></i>
+                    <span class="link-title">smtp setting</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('site.setting') }}" class="nav-link">
+                    <i class="link-icon" data-feather="calendar"></i>
+                    <span class="link-title">site setting</span>
+                </a>
+            </li>
             <li class="nav-item nav-category">User All Function</li>
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="collapse" href="#uiComponents" role="button"
@@ -148,8 +166,8 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#post" role="button"
-                    aria-expanded="false" aria-controls="uiComponents">
+                <a class="nav-link" data-bs-toggle="collapse" href="#post" role="button" aria-expanded="false"
+                    aria-controls="uiComponents">
                     <i class="link-icon" data-feather="feather"></i>
                     <span class="link-title">Blog post</span>
                     <i class="link-arrow" data-feather="chevron-down"></i>
@@ -205,6 +223,54 @@
                     </ul>
                 </div>
             </li>
+
+            <li class="nav-item nav-category">role and permissions</li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#roles" role="button" aria-expanded="false"
+                    aria-controls="roles">
+                    <i class="link-icon" data-feather="anchor"></i>
+                    <span class="link-title">role and permissions</span>
+                    <i class="link-arrow" data-feather="chevron-down"></i>
+                </a>
+                <div class="collapse" id="roles">
+                    <ul class="nav sub-menu">
+                        <li class="nav-item">
+                            <a href="{{ route('all.permission') }}" class="nav-link">all persmisioss</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('all.roles') }}" class="nav-link">All Roles</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('add.roles.permission') }}" class="nav-link">Assign Roles</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('all.roles.permission') }}" class="nav-link">All roles perimissions</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#admin" role="button" aria-expanded="false"
+                    aria-controls="admin">
+                    <i class="link-icon" data-feather="anchor"></i>
+                    <span class="link-title">Manage Admin User</span>
+                    <i class="link-arrow" data-feather="chevron-down"></i>
+                </a>
+                <div class="collapse" id="admin">
+                    <ul class="nav sub-menu">
+                        <li class="nav-item">
+                            <a href="{{ route('all.admin') }}" class="nav-link">All Admin</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('add.admin') }}" class="nav-link">Add Admin </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+
 
 
 

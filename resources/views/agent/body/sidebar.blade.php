@@ -65,6 +65,12 @@
                         <span class="link-title">property message</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('agent.schedule.request') }}" class="nav-link">
+                        <i class="link-icon" data-feather="calendar"></i>
+                        <span class="link-title">schedule request</span>
+                    </a>
+                </li>
 
                 <li class="nav-item nav-category">Components</li>
                 <li class="nav-item">

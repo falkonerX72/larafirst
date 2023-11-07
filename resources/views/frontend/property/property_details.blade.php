@@ -122,7 +122,7 @@
                             </div>
                             <ul class="info clearfix">
                                 <li><span>Address:</span> {{ $property->address }}</li>
-                                <li><span>State/county:</span> {{ $property['pstate']['state_name'] }}</li>
+                                {{-- <li><span>State/county:</span> {{ $property['pstate']['state_name'] }}</li> --}}
                                 <li><span>Neighborhood:</span> {{ $property->neighborhood }}</li>
                                 <li><span>Zip/Postal Code:</span> {{ $property->postal_code }}</li>
                                 <li><span>City:</span> {{ $property->city }}</li>
@@ -133,8 +133,8 @@
                                     data-icon-path="{{ asset('frontend/assets/images/icons/map-marker.png') }}"
                                     data-map-title="Brooklyn, New York, United Kingdom" data-map-zoom="12"
                                     data-markers='{
-            "marker-1": [40.712776, -74.005974, "<h4>Branch Office</h4><p>77/99 New York</p>","{{ asset('frontend/assets/images/icons/map-marker.png') }}"]
-        }'>
+"marker-1": [40.712776, -74.005974, "<h4>Branch Office</h4><p>77/99 New York</p>","{{ asset('frontend/assets/images/icons/map-marker.png') }}"]
+}'>
 
                                 </div>
                             </div>
@@ -190,42 +190,39 @@
                                 <h4>Schedule A Tour</h4>
                             </div>
                             <div class="form-inner">
-                                <form action="property-details.html" method="post">
+                                {{-- @auth --}}
+                                {{-- @php
+                                    $id = Auth::user()->id;
+                                    $userData = App\Models\User::find($id);
+                                @endphp --}}
+                                <form action="{{ route('store.schedule') }}" method="post">
+                                    @csrf
+                                    @if ($property->agent_id == null)
+                                        <input type="hidden" name="agent_id" value="">
+                                    @else
+                                        <input type="hidden" name="agent_id" value="{{ $property->agent_id }}">
+                                    @endif
+                                    <input type="hidden" name="property_id" value="{{ $property->id }}">
                                     <div class="row clearfix">
                                         <div class="col-lg-6 col-md-12 col-sm-12 column">
                                             <div class="form-group">
                                                 <i class="far fa-calendar-alt"></i>
-                                                <input type="text" name="date" placeholder="Tour Date"
-                                                    id="datepicker">
+                                                <input type="text" name="tour_date" placeholder="Tour Date"
+                                                    id="datepicker" required="">
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-md-12 col-sm-12 column">
                                             <div class="form-group">
                                                 <i class="far fa-clock"></i>
-                                                <input type="text" name="time" placeholder="Any Time">
+                                                <input type="text" name="tour_time" required=""
+                                                    placeholder="Any Time">
                                             </div>
                                         </div>
-                                        <div class="col-lg-4 col-md-12 col-sm-12 column">
-                                            <div class="form-group">
-                                                <input type="text" name="name" placeholder="Your Name"
-                                                    required="">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4 col-md-12 col-sm-12 column">
-                                            <div class="form-group">
-                                                <input type="email" name="email" placeholder="Your Email"
-                                                    required="">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4 col-md-12 col-sm-12 column">
-                                            <div class="form-group">
-                                                <input type="tel" name="phone" placeholder="Your Phone"
-                                                    required="">
-                                            </div>
-                                        </div>
+
+
                                         <div class="col-lg-12 col-md-12 col-sm-12 column">
                                             <div class="form-group">
-                                                <textarea name="message" placeholder="Your message"></textarea>
+                                                <textarea name="message" required="" placeholder="Your message"></textarea>
                                             </div>
                                         </div>
                                         <div class="col-lg-12 col-md-12 col-sm-12 column">
@@ -235,6 +232,10 @@
                                         </div>
                                     </div>
                                 </form>
+                                {{-- @else
+<p><b>U need to <a href="{{ route('login') }}">Login</a> first to leave comment!</b>
+</p>
+@endauth --}}
                             </div>
                         </div>
                     </div>

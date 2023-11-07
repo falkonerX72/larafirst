@@ -10,9 +10,11 @@ use App\Http\Controllers\Backend\PropertyController;
 use App\Http\Controllers\Backend\StateController;
 use App\Http\Controllers\Backend\TestimonialController;
 use App\Http\Controllers\Backend\BlogController;
+use App\Http\Controllers\Backend\RoleController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 
 use App\Http\Controllers\Agent\AgentPropertyController;
+use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\Frontend\WishListController;
 use App\Http\Controllers\Frontend\CompareController;
@@ -53,6 +55,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/change/password', [UserController::class, 'UserChangePassword'])->name('user.change.password');
 
     Route::post('/user/password/update', [UserController::class, 'UserPasswordUpdate'])->name('user.password.update');
+
+    Route::get('/user/schedule/request', [UserController::class, 'UserScheduleRequest'])->name('user.schedule.request');
 
     //user wish list all route
     Route::controller(WishlistController::class)->group(function () {
@@ -218,6 +222,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/package/invoice/{id}', 'PackageInvoice')->name('package.invoice');
         Route::get('/admin/property/message/', 'AdminPropertyMessage')->name('admin.property.message');
 
+
         Route::get('/admin/message/details/{id}', 'AdminMessageDetails')->name('admin.message.details');
     });
 
@@ -235,8 +240,17 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         Route::get('/changeStatus', 'changeStatus');
     });
-}); // End Group Admin Middleware
+    Route::controller(SettingController::class)->group(function () {
+        Route::get('/smtp/setting', 'SmtpSetting')->name('smtp.setting');
+        Route::post('/update/smpt/setting', 'UpdateSmtpSetting')->name('update.smpt.setting');
+    });
+    // Site Setting  All Route 
+    Route::controller(SettingController::class)->group(function () {
 
+        Route::get('/site/setting', 'SiteSetting')->name('site.setting');
+        Route::post('/update/site/setting', 'UpdateSiteSetting')->name('update.site.setting');
+    }); // End Group Admin Middleware
+});
 
 
 
@@ -275,6 +289,13 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
         Route::get('/agent/property/message/', 'AgentPropertyMessage')->name('agent.property.message');
 
         Route::get('/agent/message/details/{id}', 'AgentMessageDetails')->name('agent.message.details');
+
+        //shcedule request route
+        Route::get('/agent/schedule/request', 'AgentScheduleRequest')->name('agent.schedule.request');
+
+        Route::get('/agent/details/schedule/{id}', 'AgentDetailsSchedule')->name('agent.details.schedule');
+
+        Route::post('/agent/update/schedule/', 'AgentUpdateSchedule')->name('agent.update.schedule');
     });
 
 
@@ -283,6 +304,7 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
     Route::controller(AgentPropertyController::class)->group(function () {
 
         Route::get('/buy/package', 'BuyPackage')->name('buy.package');
+
         Route::get('/buy/business/plan', 'BuyBusinessPlan')->name('buy.business.plan');
         Route::post('/store/business/plan', 'StoreBusinessPlan')->name('store.business.plan');
 
@@ -294,6 +316,57 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
         Route::get('/agent/package/invoice/{id}', 'AgentPackageInvoice')->name('agent.package.invoice');
     });
 }); // End Group Agent Middleware
+
+/// permission  Group controller
+Route::controller(RoleController::class)->group(function () {
+
+    Route::get('/all/permission', [RoleController::class, 'AllPermission'])->name('all.permission');
+    Route::get('/add/permission', [RoleController::class, 'AddPermission'])->name('add.permission');
+    Route::post('/store/permission', [RoleController::class, 'StorePermission'])->name('store.permission');
+    Route::get('/edit/permission/{id}', 'EditPermission')->name('edit.permission');
+    Route::post('/update/permission', 'UpdatePermission')->name('update.permission');
+    Route::get('/delete/permission/{id}', 'DeletePermission')->name('delete.permission');
+    Route::get('/import/permission', [RoleController::class, 'ImportPermission'])->name('import.permission');
+    Route::get('/export', [RoleController::class, 'Export'])->name('export');
+}); // End Group permission  controller
+
+
+
+/// roles  Group controller
+Route::controller(RoleController::class)->group(function () {
+
+    Route::get('/all/roles', [RoleController::class, 'AllRoles'])->name('all.roles');
+    Route::get('/add/roles', [RoleController::class, 'AddRoles'])->name('add.roles');
+    Route::post('/store/roles', [RoleController::class, 'StoreRoles'])->name('store.roles');
+    Route::get('/edit/roles/{id}', 'EditRoles')->name('edit.roles');
+    Route::post('/update/roles', 'UpdateRoles')->name('update.roles');
+    Route::get('/delete/roles/{id}', 'DeleteRoles')->name('delete.roles');
+
+    //assigning Roles
+
+    Route::get('/add/roles/permission', [RoleController::class, 'AddRolesPermission'])->name('add.roles.permission');
+    Route::get('/all/roles/permission', [RoleController::class, 'AllRolesPermission'])->name('all.roles.permission');
+    Route::post('/admin/roles/update/{id}', 'AdminRolesUpdate')->name('admin.roles.update');
+    Route::get('/admin/delete/roles/{id}', 'AdminDeleteRoles')->name('admin.delete.roles');
+    Route::get('/admin/edit/roles/{id}', 'AdminEditRoles')->name('admin.edit.roles');
+    Route::post('/store/roles/permission', [RoleController::class, 'StoreRolesPermission'])->name('store.roles.permission');
+}); // End Group roles  controller
+
+//admin user all route
+Route::controller(AdminController::class)->group(function () {
+
+    Route::get('/all/admin', 'AllAdmin')->name('all.admin');
+    Route::get('/add/admin', 'AddAdmin')->name('add.admin');
+    Route::post('/store/admin', 'StoreAdmin')->name('store.admin');
+}); // End Group Admin Middleware
+
+
+
+
+
+
+
+
 
 /// frontend property details
 
@@ -328,6 +401,7 @@ Route::post('/all/property/search', [IndexController::class, 'AllPropertySearch'
 
 //send msg from agent-details page
 Route::post('/agent/details/message', [IndexController::class, 'AgentDetailsMessage'])->name('agent.details.message');
+Route::post('/store/schedule/', [IndexController::class, 'StoreSchedule'])->name('store.schedule');
 //get all rent data
 Route::get('/rent/property', [IndexController::class, 'RentProperty'])->name('rent.property');
 //get all buy data
@@ -344,3 +418,9 @@ Route::get('/all/category', [IndexController::class, 'AllCategory'])->name('all.
 Route::get('/state/details/{id}', [IndexController::class, 'StateDetails'])->name('state.details');
 //blog details
 Route::get('/blog/details/{slug}', [BlogController::class, 'BlogDetails'])->name('blog.details');
+Route::get('/blog/cat/list/{id}', [BlogController::class, 'BlogCatList'])->name('blog.cat.list');
+Route::get('/blog', [BlogController::class, 'BlogList'])->name('blog.list');
+Route::post('/store/comment', [BlogController::class, 'StoreComment'])->name('store.comment');
+Route::get('/admin/blog/comment/', [BlogController::class, 'AdminBlogComment'])->name('admin.blog.comment');
+Route::get('/admin/comment/reply/{id}', [BlogController::class, 'AdminCommentReply'])->name('admin.comment.reply');
+Route::post('/reply/message', [BlogController::class, 'ReplyMessage'])->name('reply.message');

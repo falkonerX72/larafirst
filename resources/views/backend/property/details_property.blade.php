@@ -57,10 +57,10 @@
                                         <td>City </td>
                                         <td><code>{{ $property->city }}</code></td>
                                     </tr>
-                                    <tr>
+                                    {{-- <tr>
                                         <td>State </td>
                                         <td><code>{{ $property['pstate']['state_name'] }}</code></td>
-                                    </tr>
+                                    </tr> --}}
 
                                     <tr>
                                         <td>Postal Code </td>

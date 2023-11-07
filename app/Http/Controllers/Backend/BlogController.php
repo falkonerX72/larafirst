@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\BlogCategory;
 use App\Models\BlogPost;
+use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\User;
@@ -185,6 +186,86 @@ class BlogController extends Controller
     public function BlogDetails($slug)
     {
         $blog = BlogPost::where('post_slug', $slug)->first();
-        return view('frontend.blog.blog_details', compact('blog'));
+        $tag = $blog->post_tags;
+        $tags = explode(',', $tag);
+        $comment = comment::where('post_id', $blog->id)->where('parent_id', null)->limit(5)->get();
+        // $reply = comment::where('parent_id', 'id')->limit(5)->get();
+        $category = BlogCategory::latest()->get();
+        $dpost = BlogPost::latest()->limit(3)->get();
+
+
+        return view('frontend.blog.blog_details', compact('blog', 'tags', 'category',  'dpost', 'comment'));
+    }
+
+    public function BlogCatList($id)
+    {
+        $blog = BlogPost::where('blogcat_id', $id)->paginate(5);
+        $breadcat = BlogCategory::where('id', $id)->first();
+        $bcategory = BlogCategory::latest()->get();
+        $dpost = BlogPost::latest()->limit(3)->get();
+
+        return view('frontend.blog.blog_cat_list', compact('blog', 'breadcat', 'bcategory',  'dpost'));
+    }
+    public function BlogList()
+    {
+        $blog = BlogPost::latest()->paginate(5);
+
+        $bcategory = BlogCategory::latest()->get();
+        $dpost = BlogPost::latest()->limit(3)->get();
+
+        return view('frontend.blog.blog_list', compact('blog',  'bcategory',  'dpost'));
+    }
+    public function StoreComment(Request $request)
+    {
+        $pid = $request->post_id;
+
+        comment::insert([
+            'user_id' => Auth::user()->id,
+            'post_id' => $pid,
+            'parent_id' => null,
+            'subject' => $request->subject,
+
+            'message' => $request->message,
+            'status' => '0',
+            'created_at' => Carbon::now(),
+
+        ]);
+        $notification = array(
+            'message' => 'comment will be shown after administrator confirmation',
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification);
+    }
+    public function AdminBlogComment()
+    {
+        $comment = Comment::where('parent_id', null)->latest()->get();
+        return view('backend.comment.comment_all', compact('comment'));
+    }
+    public function AdminCommentReply($id)
+    {
+
+        $comment = Comment::where('id', $id)->first();
+        return view('backend.comment.comment_reply', compact('comment'));
+    }
+    public function ReplyMessage(Request $request)
+    {
+        $id = $request->id;
+        $uid = $request->user_id;
+        $pid = $request->post_id;
+        comment::insert([
+            'user_id' => $uid,
+            'post_id' => $pid,
+            'parent_id' => $id,
+            'subject' => $request->subject,
+            'message' => $request->message,
+            'status' => '0',
+            'created_at' => Carbon::now(),
+
+        ]);
+        $notification = array(
+            'message' => 'reply added successfully!',
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification);
     }
 }

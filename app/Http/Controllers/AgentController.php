@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\schedule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
@@ -55,7 +56,10 @@ class AgentController extends Controller
         $request->session()->regenerateToken();
 
         $notification = array(
-            'message' => 'Agent Logout Successfully',
+            '
+            
+            
+            age' => 'Agent Logout Successfully',
             'alert-type' => 'success'
         );
 
@@ -149,7 +153,5 @@ class AgentController extends Controller
 
         return back()->with($notification);
     } // End Method 
-
-
-
+ 
 }

@@ -12,6 +12,7 @@ use App\Models\Wishlist;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Facility;
 use App\Models\Amenities;
+use App\Models\Schedule;
 use App\Models\State;
 use App\Models\PropertyType;
 use App\Models\User;
@@ -20,6 +21,7 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Carbon\Carbon;
 use App\Models\PackagePlan;
 use Illuminate\Auth\Events\Login;
+
 use PhpParser\Builder\Function_;
 use PhpParser\Node\Expr\FuncCall;
 
@@ -226,4 +228,33 @@ class IndexController extends Controller
 
         return view('frontend.property.property_search', compact('property', 'prent', 'psale'));
     } // End Method 
+    public function StoreSchedule(Request $request)
+    {
+
+        $aid = $request->agent_id;
+
+        $pid = $request->property_id;
+        if (Auth::check()) {
+            Schedule::insert([
+                'user_id' => Auth::user()->id,
+                'agent_id' => $aid,
+                'property_id' => $pid,
+                'tour_date' => $request->tour_date,
+                'tour_time' => $request->tour_time,
+                'message' => $request->message,
+                'created_at' => Carbon::now(),
+            ]);
+            $notification = array(
+                'message' => 'msg sent successfully',
+                'alert-type' => 'success'
+            );
+            return redirect()->back()->with($notification);
+        } else {
+            $notification = array(
+                'message' => 'please login your account first',
+                'alert-type' => 'error'
+            );
+            return redirect()->back()->with($notification);
+        }
+    }
 }

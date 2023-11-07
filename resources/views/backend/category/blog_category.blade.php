@@ -121,6 +121,11 @@
         </div>
     </div>
 
+    <button type="button" class="btn btn-inverse-warning"
+    data-bs-toggle="modal" data-bs-target="#catedit"
+    id="{{ $item->id }}" onclick="categoryEdit(this.id)">
+    Edit
+</button>
 
     <script type="text/javascript">
         function categoryEdit(id) {
